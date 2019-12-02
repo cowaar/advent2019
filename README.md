@@ -1,2 +1,1 @@
- advent2019
- advent2019
+Alex's attempts of Advent of Code 2019
