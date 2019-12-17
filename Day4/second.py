@@ -1,3 +1,5 @@
+import re
+
 def convertToList(num):
     res = [int(x) for x in str(num)]
     return res
@@ -24,20 +26,22 @@ def checkContainsValidRepeatingUnits(list):
         i += 1
     return containsValidUnits
 
+
 def checkOnlyDouble(list,pos1,pos2):
     if pos1 == 0:
-        if list[pos1] == list[pos2 + 1]:
+        if list[pos1] == list[pos2 + 1] and list[pos2] == list[pos2 + 1]:
             return False
         else:
             return True
     if pos2 == len(list)-1:
-        if list[pos1-1] == list[pos1]:
+        if list[pos1-1] == list[pos1] and list[pos1-1] == list[pos2]:
             return False
         else:
             return True
     else:
         if list[pos1-1] != list[pos1] and list[pos1] != list[pos2 + 1]:
-            return False
+            return True
+
 
 
 def checkDecreases(list):
@@ -71,7 +75,7 @@ def checkRange(start, end):
 
         if testAllRules(i) == True:
             possiblePWs += 1
-        print(testAllRules(i), i)
+
         i += 1
 
     return possiblePWs
@@ -81,6 +85,6 @@ print(testAllRules(111122))
 print(testAllRules(112255))
 print(testAllRules(111233))
 print(testAllRules(112222))
-print(testAllRules(111122))
+print(testAllRules(888899))
 
-# print(checkRange(372037,905157))
+print(checkRange(372037,905157))
