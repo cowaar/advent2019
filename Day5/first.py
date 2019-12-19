@@ -3,36 +3,42 @@ def posOrImm(immSignal, inputArray, position):
     if immSignal == "1":
         return position
     if immSignal == "0":
-
         return inputArray[position]
 
+def getPositionsFromMode(inputArray, p, immSignal):
+    pos1 = posOrImm(immSignal[2], inputArray, p + 1)
+    pos2 = posOrImm(immSignal[1], inputArray, p + 2)
+    pos3 = posOrImm(immSignal[0], inputArray, p + 3)
+    return(pos1,pos2,pos3)
 
-def opcode1(inputArray, p):
-    immSignal = format(inputArray[p], "05")[:3]
-    inputArray[posOrImm(immSignal[0], inputArray, p + 3)] = inputArray[posOrImm(immSignal[2], inputArray, p + 1)] + \
-                                                            inputArray[posOrImm(immSignal[1], inputArray, p + 2)]
+
+def opcode1(inputArray, p, immSignal):
+    pos1,pos2,pos3 = getPositionsFromMode(inputArray, p, immSignal)
+
+    inputArray[pos3] = inputArray[pos1] + inputArray[pos2]
     return inputArray
 
 
-def opcode2(inputArray, p):
-    immSignal = format(inputArray[p], "05")[:3]
-    inputArray[posOrImm(immSignal[0], inputArray, p + 3)] = inputArray[posOrImm(immSignal[2], inputArray, p + 1)] * \
-                                                            inputArray[posOrImm(immSignal[1], inputArray, p + 2)]
+def opcode2(inputArray, p, immSignal):
+    pos1,pos2,pos3 = getPositionsFromMode(inputArray, p, immSignal)
+
+    inputArray[pos3] = inputArray[pos1] * inputArray[pos2]
     return inputArray
 
 
-def opcode3(inputArray, p):
-    immSignal = format(inputArray[p], "05")[:3]
-
+def opcode3(inputArray, p, immSignal):
     userInput = input("Enter your Input: ")
+    pos1,pos2,pos3 = getPositionsFromMode(inputArray, p, immSignal)
 
-    inputArray[posOrImm(immSignal[2], inputArray, p + 1)] = int(userInput)
+    inputArray[pos1] = int(userInput)
     return inputArray
 
 
-def opcode4(inputArray, p):
-    immSignal = format(inputArray[p], "05")[:3]
-    output = inputArray[posOrImm(immSignal[2], inputArray, p + 1)]
+def opcode4(inputArray, p, immSignal):
+
+    pos1,pos2,pos3 = getPositionsFromMode(inputArray, p, immSignal)
+
+    output = inputArray[pos1]
     print(output)
     return inputArray
 
@@ -43,18 +49,18 @@ def Intcode(Array):
     while i < len(Array):
 
         opcode = str(format(Array[i],"05"))[3:]
-
+        immSignal = format(Array[i], "05")[:3]
         if opcode == "01":
-            Array = opcode1(Array, i)
+            Array = opcode1(Array, i, immSignal)
             i += 4
         if opcode == "02":
-            Array = opcode2(Array, i)
+            Array = opcode2(Array, i, immSignal)
             i += 4
         if opcode == "03":
-            Array = opcode3(Array, i)
+            Array = opcode3(Array, i, immSignal)
             i += 2
         if opcode == "04":
-            Array = opcode4(Array, i)
+            Array = opcode4(Array, i, immSignal)
             i += 2
         if opcode == "99":
             break
